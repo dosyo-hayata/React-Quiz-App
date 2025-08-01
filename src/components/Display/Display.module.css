@@ -1,0 +1,20 @@
+.display {
+	margin: 0 auto;   /* 中央寄せ */
+	border: 1px solid #fff;
+	padding: 20px;
+	width: 1000px; /* 枠サイズを固定（必要に応じて調整） */
+	height: 100px; /* 高さも固定すると枠のサイズが変わらない */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: bold;
+	text-align: center;
+	background-color: rgb(56, 56, 58);
+	font-size: 35px; /* ←文字だけを大きく */
+	overflow: hidden; /* はみ出したら隠す */
+	align-items: center;
+	justify-content: center;
+	
+	white-space: nowrap;         /* ← これが重要：改行させない */
+	text-overflow: ellipsis; 
+}

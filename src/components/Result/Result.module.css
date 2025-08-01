@@ -1,0 +1,12 @@
+.result {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+  .resultHighlight {
+	color: bold;
+	font-size: 40px;
+  }
+
