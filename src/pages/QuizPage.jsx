@@ -1,21 +1,25 @@
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import Display from "../components/Display/Display";
 import quizData from "../deta/quiz";
 import Button from "../components/Button/Button";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../const";
-import { useEffect } from "react";
 
 
 export default function QuizPage() {
+	const location = useLocation();
+	const navigate = useNavigate();
+	const queryParams = new URLSearchParams(location.search);
+	const level = queryParams.get("level") || "easy"; // default = easy
+
+	const currentQuiz = quizData[level] || quizData.easy;
+	const MAX_QUIZ_LEN = currentQuiz.length;
+
 	const [quizIndex, setQuizIndex] = useState(0);
 	const [answerLogs, setAnswerLogs] = useState([]);
-	const navigation = useNavigate();
-	const MAX_QUIZ_LEN = quizData.length;
 
-	// Assuming you want to display the first question
 	const handleClick = (clickedIndex) => {
-		if (clickedIndex === quizData[quizIndex].answerIndex) {
+		if (clickedIndex === currentQuiz[quizIndex].answerIndex) {
 			setAnswerLogs((prev) => [...prev, true]);
 		} else {
 			setAnswerLogs((prev) => [...prev, false]);
@@ -25,28 +29,44 @@ export default function QuizPage() {
 
 	useEffect(() => {
 		if (answerLogs.length === MAX_QUIZ_LEN) {
-			const correctNum = answerLogs.filter((answer) => {
-				return answer === true;
-			})
-			navigation(ROUTES.RESULT, {
+			const correctNum = answerLogs.filter((answer) => answer).length;
+			navigate(ROUTES.RESULT, {
 				state: {
 					maxQuizLen: MAX_QUIZ_LEN,
-					correctNumLen: correctNum.length
+					correctNumLen: correctNum,
 				}
 			});
 		}
 	}, [answerLogs]);
+
 	return (
 		<>
-			{quizData[quizIndex] && <Display>{`Q${quizIndex + 1}. ${quizData[quizIndex].question}`}</Display>}
-			<br />
-			{quizData[quizIndex] && quizData[quizIndex].options.map((option, index) => {
-				return (
-					<Button  key={`option-${index}`} onClick={() => handleClick(index)}>
-						{option}
-					</Button>
-				);
-			})}
+        <div style={{ 
+			width: "100%", 
+			backgroundColor: "#ff0202ff", 
+			height: "10px", 
+			marginBottom: "20px" 
+		}}>
+			<div style={{ 
+				width: `${(quizIndex / MAX_QUIZ_LEN) * 100}%`, 
+				height: "100%", 
+				backgroundColor: "blue", 
+				transition: "width 0.3s ease"
+			}} />
+		  </div>
+
+
+			{currentQuiz[quizIndex] && (
+				<>
+					<Display>{`Q${quizIndex + 1}. ${currentQuiz[quizIndex].question}`}</Display>
+					<br />
+					{currentQuiz[quizIndex].options.map((option, index) => (
+						<Button key={`option-${index}`} onClick={() => handleClick(index)}>
+							{option}
+						</Button>
+					))}
+				</>
+			)}
 		</>
 	);
 }

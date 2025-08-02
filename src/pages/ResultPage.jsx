@@ -4,6 +4,7 @@ import { ROUTES } from '../const';
 import Loading from '../components/Loading/Loading';
 import { useState, useEffect } from 'react';
 
+
 export default function ResultPage() {
 	const [active, setActive] = useState(false);
 	const location = useLocation();
@@ -17,7 +18,7 @@ export default function ResultPage() {
 	}, []);
 
 	const handleRetry = () => {
-		navigate(ROUTES.HOME); // あるいは "/" でもOK
+		navigate(ROUTES.HOME); 
 	};
 
 	return (
